@@ -1,6 +1,25 @@
-// Add any interactive features or form submission handling here
-document.getElementById('contact-form').addEventListener('submit', function (event) {
-  event.preventDefault();
-  // Add code for form submission or validation
-  alert('Form submitted!');
+document.addEventListener('DOMContentLoaded', function () {
+  const contactForm = document.getElementById('contact-form');
+
+  contactForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(contactForm);
+
+      // Send form data to the server
+      fetch('/submit-form', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(Object.fromEntries(formData))
+      })
+      .then(response => response.text())
+      .then(message => {
+          alert(message);
+          contactForm.reset();
+      })
+      .catch(error => console.error(error));
+  });
 });
+
